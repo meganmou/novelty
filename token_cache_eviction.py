@@ -1,3 +1,5 @@
+# Adapted from StreamingLLM eval_long_ppl.py
+
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -11,7 +13,7 @@ import re
 import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-os.environ["TRANSFORMERS_CACHE"] = "/deep/group/aicc-bootcamp/vicuna"
+os.environ["TRANSFORMERS_CACHE"] = "/path/to/cache"
 
 from tqdm import tqdm
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
@@ -129,7 +131,7 @@ if __name__ == "__main__":
         "--base_model_path", type=str, default="lmsys/vicuna-7b-v1.5"
     )
     parser.add_argument(
-        "--peft_model_path", type=str, default="/deep/u/joycech/LLaVA/checkpoints/full-data-finetuned-vicuna"
+        "--peft_model_path", type=str, default="/checkpoints/full-data-finetuned-vicuna"
     )
     parser.add_argument("--data_root", type=str, default="data/")
     parser.add_argument("--enable_streaming", action="store_true")
