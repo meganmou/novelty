@@ -1,3 +1,5 @@
+# Adapted from StreamingLLM run_streaming_llm.py
+
 import warnings
 
 warnings.filterwarnings("ignore")
