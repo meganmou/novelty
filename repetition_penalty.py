@@ -1,3 +1,5 @@
+# Adapted from StreamingLLM run_streaming_llm.py
+
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -11,7 +13,7 @@ import re
 import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-os.environ["TRANSFORMERS_CACHE"] = "/deep/group/aicc-bootcamp/vicuna"
+os.environ["TRANSFORMERS_CACHE"] = "/path/to/cache"
 
 from tqdm import tqdm
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
@@ -117,49 +119,49 @@ def main(args):
 
     model = PeftModel.from_pretrained(model, args.peft_model_path)
 
-    # Dynamic inference: user can input prompts and get responses
-    # while True:
-    #     user_input = input("USER: ")
-    #     if user_input.lower() == 'quit':
-    #         break  # Exit the loop if the user inputs 'quit'
-    #     prompts = ["USER: " + user_input]
-    #     # Perform inference on the input prompt
-    #     if args.enable_streaming:
-    #         kv_cache = enable_streaming_llm(
-    #             model, start_size=args.start_size, recent_size=args.recent_size
-    #         )
-    #     else:
-    #         kv_cache = None
-    #     streaming_inference(model, tokenizer, prompts, kv_cache)
+    Dynamic inference: user can input prompts and get responses
+    while True:
+        user_input = input("USER: ")
+        if user_input.lower() == 'quit':
+            break  # Exit the loop if the user inputs 'quit'
+        prompts = ["USER: " + user_input]
+        # Perform inference on the input prompt
+        if args.enable_streaming:
+            kv_cache = enable_streaming_llm(
+                model, start_size=args.start_size, recent_size=args.recent_size
+            )
+        else:
+            kv_cache = None
+        streaming_inference(model, tokenizer, prompts, kv_cache)
 
-    test_filepath = "/deep/u/joycech/LLaVA/data/solve_repetition_prompt_examples.jsonl"
-    print(f"Loading data from {test_filepath} ...")
+    # test_filepath = "/test_examples.jsonl"
+    # print(f"Loading data from {test_filepath} ...")
 
-    if not os.path.exists(test_filepath):
-        download_url(
-            "https://raw.githubusercontent.com/lm-sys/FastChat/main/fastchat/llm_judge/data/mt_bench/question.jsonl",
-            args.data_root,
-        )
-        os.rename(os.path.join(args.data_root, "question.jsonl"), test_filepath)
+    # if not os.path.exists(test_filepath):
+    #     download_url(
+    #         "https://raw.githubusercontent.com/lm-sys/FastChat/main/fastchat/llm_judge/data/mt_bench/question.jsonl",
+    #         args.data_root,
+    #     )
+    #     os.rename(os.path.join(args.data_root, "question.jsonl"), test_filepath)
 
-    list_data = load_jsonl(test_filepath)
-    prompts = []
-    for sample in list_data:
-        prompts += sample["turns"]
+    # list_data = load_jsonl(test_filepath)
+    # prompts = []
+    # for sample in list_data:
+    #     prompts += sample["turns"]
 
-    if args.enable_streaming:
-        kv_cache = enable_streaming_llm(
-            model, start_size=args.start_size, recent_size=args.recent_size
-        )
-    else:
-        kv_cache = None
+    # if args.enable_streaming:
+    #     kv_cache = enable_streaming_llm(
+    #         model, start_size=args.start_size, recent_size=args.recent_size
+    #     )
+    # else:
+    #     kv_cache = None
 
-    streaming_inference(
-        model,
-        tokenizer,
-        prompts,
-        kv_cache,
-    )
+    # streaming_inference(
+    #     model,
+    #     tokenizer,
+    #     prompts,
+    #     kv_cache,
+    # )
 
 
 if __name__ == "__main__":
@@ -168,7 +170,7 @@ if __name__ == "__main__":
         "--base_model_path", type=str, default="lmsys/vicuna-7b-v1.5"
     )
     parser.add_argument(
-        "--peft_model_path", type=str, default="/deep/u/joycech/LLaVA/checkpoints/one-shot-finetuned-vicuna"
+        "--peft_model_path", type=str, default="/checkpoints/one-shot-finetuned-vicuna"
     )
     parser.add_argument("--data_root", type=str, default="data/")
     parser.add_argument("--enable_streaming", action="store_true")
