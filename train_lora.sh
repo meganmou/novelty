@@ -1,3 +1,5 @@
+# Adapted from FastChat train_lora.sh
+
 deepspeed finetuning/fastchat/train/train_lora.py \
     --model_name_or_path lmsys/vicuna-7b-v1.5  \
     --lora_r 8 \
@@ -26,4 +28,4 @@ deepspeed finetuning/fastchat/train/train_lora.py \
     --deepspeed ./scripts/zero2.json \
     --gradient_checkpointing True \
     --flash_attn False \
-    --cache_dir "/deep/group/aicc-bootcamp/geovlm/models/rural_urban_llava_7b_lora_cache"
+    --cache_dir "/path/to/cache"
