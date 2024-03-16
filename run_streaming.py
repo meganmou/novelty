@@ -1,3 +1,5 @@
+# Adapted from StreamingLLM run_streaming_llm.py
+
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -11,7 +13,7 @@ import re
 import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-os.environ["TRANSFORMERS_CACHE"] = "/deep/group/aicc-bootcamp/vicuna"
+os.environ["TRANSFORMERS_CACHE"] = "/path/to/cache"
 
 from tqdm import tqdm
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
@@ -138,7 +140,7 @@ def main(args):
     #         kv_cache = None
     #     streaming_inference(model, tokenizer, prompts, kv_cache)
 
-    test_filepath = "/deep/u/joycech/LLaVA/data/all_vanilla_test_prompts.jsonl"
+    test_filepath = "/data/all_vanilla_test_prompts.jsonl"
     print(f"Loading data from {test_filepath} ...")
 
     # if not os.path.exists(test_filepath):
@@ -174,7 +176,7 @@ if __name__ == "__main__":
         "--model_name_or_path", type=str, default="lmsys/vicuna-7b-v1.5"
     )
     parser.add_argument(
-        "--peft_model_path", type=str, default="/deep/u/joycech/LLaVA/checkpoints/one-shot-finetuned-vicuna"
+        "--peft_model_path", type=str, default="/checkpoints/one-shot-finetuned-vicuna"
     )
     parser.add_argument("--data_root", type=str, default="data/")
     parser.add_argument("--enable_streaming", action="store_false")
